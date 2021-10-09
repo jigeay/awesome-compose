@@ -49,14 +49,14 @@ stages:
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
 
- - job: run
+  - job: run
     displayName: Deploy to Azure and run
     steps:
     - task: DockerCompose@0
       displayName: Run services
       inputs:
-      containerregistrytype: Container Registry
-      dockerRegistryEndpoint: "PersonnalDockerHub"
+        containerregistrytype: Container Registry
+        dockerRegistryEndpoint: "PersonnalDockerHub"
         action: Run services
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
