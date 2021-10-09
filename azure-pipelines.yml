@@ -53,19 +53,16 @@ stages:
     displayName: Deploy to Azure and run
     steps:
     - task: DockerCompose@0
-      displayName: Run services
+      displayName: Run db service
       inputs:
-        containerregistrytype: Container Registry
-        dockerRegistryEndpoint: "PersonnalDockerHub"
-        action: Run services
+        action: Run a specific service
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: docker-compose.yml
         projectName: $(Build.Repository.Name)
-        dockerComposeFile: $(dockercomposefilePath)
         qualifyImageNames: true
-        buildImages: true
-        abortOnContainerExit: true
-        detached: false
+        serviceName: db
+        detached: true
 
 
 
