@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '9be80383-66bf-49e6-92b7-a08b92bc38da'
   imageRepository: 'jigeayawesomecompose'
   containerRegistry: 'awsomecompose.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)**/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/**/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
