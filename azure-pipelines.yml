@@ -20,19 +20,13 @@ variables:
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
+stages:
 - stage: Build_service
   displayName: Build and push docker-compose image
   jobs:
   - job: Build
     displayName: Build
     steps:
-    - task: DockerCompose@0
-      displayName: Container registry login
-      inputs:
-        action: Container registry login
-        containerregistrytype: Azure Container Registry
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(azureContainerRegistry)
     - task: DockerCompose@0
       displayName: Build services
       inputs:
