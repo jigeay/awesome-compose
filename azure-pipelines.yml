@@ -48,21 +48,6 @@ stages:
         dockerComposeFile: $(dockercomposefilePath)
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
-  - job: run
-    displayName: Deploy to Azure and run
-    steps:
-    - task: DockerCompose@0
-      displayName: Run services
-      inputs:
-        action: Run services
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(azureContainerRegistry)
-        projectName: $(Build.Repository.Name)
-        dockerComposeFile: $(dockercomposefilePath)
-        qualifyImageNames: true
-        buildImages: true
-        abortOnContainerExit: true
-        detached: false
 
 
 
