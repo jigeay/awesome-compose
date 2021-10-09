@@ -58,7 +58,7 @@ stages:
         action: Run a specific service
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
-        dockerComposeFile: docker-compose.yml
+        dockerComposeFile: $(dockercomposefilePath)
         projectName: $(Build.Repository.Name)
         qualifyImageNames: true
         serviceName: db
