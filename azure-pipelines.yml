@@ -33,7 +33,6 @@ stages:
         action: Build services
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
-        dockerComposeFile: aspnet-mssql/docker-compose.yml
         projectName: $(Build.Repository.Name)
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
@@ -43,7 +42,6 @@ stages:
         action: Push services
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
-        dockerComposeFile: docker-compose.yml
         projectName: $(Build.Repository.Name)
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
