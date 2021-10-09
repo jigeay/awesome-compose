@@ -11,7 +11,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '9be80383-66bf-49e6-92b7-a08b92bc38da'
-  azureSubscriptionEndpoint: '9be80383-66bf-49e6-92b7-a08b92bc38da'
+  azureSubscriptionEndpoint: 'ba8d19e9-6525-47b3-9d91-2c5246b42de6'
   imageRepository: 'jigeayawesomecompose'
   azureContainerRegistry: 'awsomecompose.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/**/Dockerfile'
