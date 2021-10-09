@@ -11,8 +11,9 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '9be80383-66bf-49e6-92b7-a08b92bc38da'
+  azureSubscriptionEndpoint: '9be80383-66bf-49e6-92b7-a08b92bc38da'
   imageRepository: 'jigeayawesomecompose'
-  containerRegistry: 'awsomecompose.azurecr.io'
+  azureContainerRegistry: 'awsomecompose.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/**/Dockerfile'
   tag: '$(Build.BuildId)'
 
@@ -20,7 +21,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build
+- stage: Build_DockerFile
   displayName: Build and push stage
   jobs:
   - job: Build
@@ -37,3 +38,48 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+- stage: Build_service
+  displayName: Build and push docker-compose image
+  - job: Build
+    displayName: Build
+    steps:
+    - task: DockerCompose@0
+      displayName: Container registry login
+      inputs:
+        containerregistrytype: Azure Container Registry
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+    - task: DockerCompose@0
+      displayName: Build services
+      inputs:
+        action: Build services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: aspnet-mssql/docker-compose.yml
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+    - task: DockerCompose@0
+      displayName: Push services
+      inputs:
+        action: Push services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        dockerComposeFile: docker-compose.yml
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+
+
+
+
+
+
+
+
+
+
+
+
+
