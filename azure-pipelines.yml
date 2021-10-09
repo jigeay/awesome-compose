@@ -41,6 +41,7 @@ stages:
 
 - stage: Build_service
   displayName: Build and push docker-compose image
+  jobs:
   - job: Build
     displayName: Build
     steps:
