@@ -14,8 +14,9 @@ variables:
   azureSubscriptionEndpoint: 'MatthieuAZURE'
   imageRepository: 'jigeayawesomecompose'
   azureContainerRegistry: 'awsomecompose.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/**/Dockerfile'
+  dockercomposefilePath: 'aspnet-mssql/docker-compose.yaml'
   tag: '$(Build.BuildId)'
+  
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -34,6 +35,7 @@ stages:
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
         projectName: $(Build.Repository.Name)
+        dockerComposeFile: $(dockercomposefilePath)
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
     - task: DockerCompose@0
@@ -43,6 +45,7 @@ stages:
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
         projectName: $(Build.Repository.Name)
+        dockerComposeFile: $(dockercomposefilePath)
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
   - job: run
@@ -55,6 +58,7 @@ stages:
         azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(azureContainerRegistry)
         projectName: $(Build.Repository.Name)
+        dockerComposeFile: $(dockercomposefilePath)
         qualifyImageNames: true
         buildImages: true
         abortOnContainerExit: true
