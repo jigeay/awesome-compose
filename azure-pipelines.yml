@@ -1,0 +1,75 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '9be80383-66bf-49e6-92b7-a08b92bc38da'
+  azureSubscriptionEndpoint: 'MatthieuAZURE'
+  imageRepository: 'jigeayawesomecompose'
+  azureContainerRegistry: 'awsomecompose.azurecr.io'
+  dockercomposefilePath: 'aspnet-mssql/docker-compose.yaml'
+  tag: '$(Build.BuildId)'
+  
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: staging
+  displayName: Build and push docker-compose image
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - task: DockerCompose@0
+      displayName: Build services
+      inputs:
+        action: Build services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        projectName: $(Build.Repository.Name)
+        dockerComposeFile: $(dockercomposefilePath)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+    - task: DockerCompose@0
+      displayName: Push services
+      inputs:
+        action: Push services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(azureContainerRegistry)
+        projectName: $(Build.Repository.Name)
+        dockerComposeFile: $(dockercomposefilePath)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+
+  - job: Artifact
+    dependsOn:
+      - Build
+    displayName: copy docker-compose.yml as an artifact
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        Contents: $(dockercomposefilePath)
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        OverWrite: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+
+
+
+
+
+
+
+
+
+
+
+
