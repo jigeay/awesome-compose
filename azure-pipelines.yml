@@ -18,7 +18,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build_service
+- stage: staging
   displayName: Build and push docker-compose image
   jobs:
   - job: Build
@@ -45,22 +45,19 @@ stages:
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
 
-  - job: run
-    displayName: Deploy to Azure and run
+  - job: Artifact
+    displayName: copy docker-compose.yml as an artifact
     steps:
-    - task: DockerCompose@0
-      displayName: Run db service
+    - task: CopyFiles@2
       inputs:
-        action: Run a specific service
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        containerregistrytype: Container Registry
-        dockerRegistryEndpoint: PersonnalDockerHub
-        azureContainerRegistry: $(azureContainerRegistry)
-        dockerComposeFile: $(dockercomposefilePath)
-        projectName: $(Build.Repository.Name)
-        qualifyImageNames: true
-        serviceName: db
-        detached: true
+        Contents: $(dockercomposefilePath)
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        OverWrite: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
 
 
 
