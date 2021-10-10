@@ -46,6 +46,8 @@ stages:
         additionalImageTags: $(Build.BuildId)
 
   - job: Artifact
+    dependsOn:
+      - Build
     displayName: copy docker-compose.yml as an artifact
     steps:
     - task: CopyFiles@2
